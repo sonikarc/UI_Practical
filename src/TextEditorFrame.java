@@ -77,6 +77,7 @@ public class TextEditorFrame extends JFrame {
 	
 	public void AboutActionPerformed(ActionEvent e) {		
 		AboutTextEditor dialog = new AboutTextEditor(this);
+		dialog.setLocationRelativeTo(this);
 		dialog.setModal(true);
 		dialog.setVisible(true);
 	}

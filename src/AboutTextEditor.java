@@ -11,6 +11,9 @@ public class AboutTextEditor extends JDialog implements ActionListener {
 	JPanel contentPane;	
 	BorderLayout contentLayout = new BorderLayout();
 
+	JPanel buttonPane = new JPanel();
+	FlowLayout buttonLayout = new FlowLayout();
+	
 	JButton buttonOK = new JButton("Ok");
 	
 	public AboutTextEditor(Frame owner) {
@@ -19,9 +22,12 @@ public class AboutTextEditor extends JDialog implements ActionListener {
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(contentLayout);
 		
+		buttonPane.setLayout(buttonLayout);
+		buttonPane.add(buttonOK);
+		
 		buttonOK.addActionListener(this);
 		
-		contentPane.add(buttonOK, BorderLayout.SOUTH);
+		contentPane.add(buttonPane, BorderLayout.SOUTH);
 		
 		this.pack();
 	}
