@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 @SuppressWarnings({ "static-access", "serial" })
@@ -121,11 +122,20 @@ public class TextEditorFrame extends JFrame {
 	
 	
 	private void saveFile(String fileName) {
+		boolean exists = false;
+		
 		if(fileName == null) {
 			if(chooser.showSaveDialog(this) == chooser.APPROVE_OPTION) {
 				fileName = chooser.getSelectedFile().getPath();
+				// TODO fix this.
+//				exists = chooser.getSelectedFile().exists();
+//				if(exists == true) {
+//					JOptionPane optionPane = new JOptionPane();
+//					int answer = optionPane.showConfirmDialog(chooser, "This file already exists, would you like to overwrite?", fileName, optionPane.WARNING_MESSAGE, optionPane.YES_NO_CANCEL_OPTION);
+//					System.err.println(answer);
+//				}
 			}
-		} else if(this.fileName.compareToIgnoreCase(fileName) == 0) { fileName = this.fileName; }
+		} else if(this.fileName.compareToIgnoreCase(fileName) == 0) { fileName = this.fileName;}
 		
 		try {
 			File file = new File(fileName);
