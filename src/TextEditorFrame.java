@@ -44,6 +44,8 @@ public class TextEditorFrame extends JFrame {
 	
 	JLabel statusBar = new JLabel();
 	
+	String fileName = null;
+	
 	public TextEditorFrame() {
 		this.setSize(new Dimension(400, 300));
 		this.setTitle("Text Editor");
@@ -52,6 +54,7 @@ public class TextEditorFrame extends JFrame {
 		contentPane.setLayout(borderLayout);
 		
 		menuFileOpen.addActionListener(new OpenActionAdapter(this));
+		menuFileSave.addActionListener(new SaveActionAdapter(this));
 		menuFileSaveAs.addActionListener(new SaveAsActionAdapter(this));
 		menuFileExit.addActionListener(new ExitActionAdapter(this));
 		menuFile.add(menuFileOpen);
@@ -82,6 +85,7 @@ public class TextEditorFrame extends JFrame {
 		}
 		
 		buttonOpen.addActionListener(new OpenActionAdapter(this));
+		buttonSave.addActionListener(new SaveActionAdapter(this));
 		toolBar.add(buttonOpen);
 		toolBar.add(buttonSave);
 		toolBar.add(buttonHelp);
@@ -106,10 +110,33 @@ public class TextEditorFrame extends JFrame {
 			textArea.setText(new String(data, 0, charsRead));
 			
 			statusBar.setText("Opened file: " + fileName);
+			
+			this.fileName = fileName;
 		} catch (FileNotFoundException e) {
 			statusBar.setText("Could not find file: " + fileName);
 		} catch (IOException e) {
 			statusBar.setText("Error reading from file: " + fileName);			
+		}
+	}
+	
+	
+	private void saveFile(String fileName) {
+		if(fileName == null) {
+			if(chooser.showSaveDialog(this) == chooser.APPROVE_OPTION) {
+				fileName = chooser.getSelectedFile().getPath();
+			}
+		} else if(this.fileName.compareToIgnoreCase(fileName) == 0) { fileName = this.fileName; }
+		
+		try {
+			File file = new File(fileName);
+			FileWriter out = new FileWriter(file);
+			String text = textArea.getText();
+			out.write(text);
+			out.close();
+			
+			statusBar.setText("Saved file to: " + fileName);
+		} catch (IOException e) {
+			statusBar.setText("Error writing to file: " + fileName);
 		}
 	}
 	
@@ -130,10 +157,15 @@ public class TextEditorFrame extends JFrame {
 	
 	public void SaveAsActionPerformed(ActionEvent e) {
 		if(chooser.showSaveDialog(this) == chooser.APPROVE_OPTION) {
-			System.err.println(chooser.getSelectedFile().getPath());
+			saveFile(chooser.getSelectedFile().getPath());
 		}
 		
 		repaint();
+	}
+	
+	
+	public void SaveActionPerformed(ActionEvent e) {
+		saveFile(this.fileName);
 	}
 	
 	
@@ -192,6 +224,19 @@ public class TextEditorFrame extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			adaptee.SaveAsActionPerformed(e);
+		}
+	}
+	
+	
+	class SaveActionAdapter implements ActionListener {
+		TextEditorFrame adaptee;
+		
+		SaveActionAdapter(TextEditorFrame adaptee) {
+			this.adaptee = adaptee;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			adaptee.SaveActionPerformed(e);
 		}
 	}
 }
