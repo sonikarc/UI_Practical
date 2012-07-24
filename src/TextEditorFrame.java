@@ -23,13 +23,13 @@ public class TextEditorFrame extends JFrame {
 	JMenu menuHelp = new JMenu("Help");
 			JMenuItem menuHelpAbout = new JMenuItem("About");
 	
-	JButton button1;
-	JButton button2;
-	JButton button3;
+	JButton buttonOpen;
+	JButton buttonSave;
+	JButton buttonHelp;
 	
-	ImageIcon image1;
-	ImageIcon image2;
-	ImageIcon image3;
+	ImageIcon imageOpen;
+	ImageIcon imageSave;
+	ImageIcon imageHelp;
 	
 	public TextEditorFrame() {
 		this.setSize(new Dimension(400, 300));
@@ -49,22 +49,22 @@ public class TextEditorFrame extends JFrame {
 		this.setJMenuBar(menuBar);
 		
 		try {
-			image1 = new ImageIcon(TextEditorFrame.class.getResource("Open24.gif"));
-			image2 = new ImageIcon(TextEditorFrame.class.getResource("Save24.gif"));
-			image3 = new ImageIcon(TextEditorFrame.class.getResource("Help24.gif"));
+			imageOpen = new ImageIcon(TextEditorFrame.class.getResource("Open24.gif"));
+			imageSave = new ImageIcon(TextEditorFrame.class.getResource("Save24.gif"));
+			imageHelp = new ImageIcon(TextEditorFrame.class.getResource("Help24.gif"));
 			
-			button1 = new JButton("Open", image1);
-			button2 = new JButton("Save", image2);
-			button3 = new JButton("Help", image3);
+			buttonOpen = new JButton("Open", imageOpen);
+			buttonSave = new JButton("Save", imageSave);
+			buttonHelp = new JButton("Help", imageHelp);
 		} catch (Exception e) {
-			button1 = new JButton("Open");
-			button2 = new JButton("Save");
-			button3 = new JButton("Help");
+			buttonOpen = new JButton("Open");
+			buttonSave = new JButton("Save");
+			buttonHelp = new JButton("Help");
 		}
 		
-		toolBar.add(button1);
-		toolBar.add(button2);
-		toolBar.add(button3);
+		toolBar.add(buttonOpen);
+		toolBar.add(buttonSave);
+		toolBar.add(buttonHelp);
 		
 		contentPane.add(toolBar, BorderLayout.NORTH);
 	}
