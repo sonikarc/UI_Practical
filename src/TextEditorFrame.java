@@ -5,6 +5,9 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 
 @SuppressWarnings("serial")
@@ -13,9 +16,17 @@ public class TextEditorFrame extends JFrame {
 	JPanel contentPane;
 	BorderLayout borderLayout = new BorderLayout();
 	JToolBar toolBar = new JToolBar();
+
+	JMenuBar menuBar = new JMenuBar();
+	JMenu menuFile = new JMenu("File");
+			JMenuItem menuFileExit = new JMenuItem("Exit");
+	JMenu menuHelp = new JMenu("Help");
+			JMenuItem menuHelpAbout = new JMenuItem("About");
+	
 	JButton button1;
 	JButton button2;
 	JButton button3;
+	
 	ImageIcon image1;
 	ImageIcon image2;
 	ImageIcon image3;
@@ -26,6 +37,14 @@ public class TextEditorFrame extends JFrame {
 		
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(borderLayout);
+		
+		menuFile.add(menuFileExit);
+		menuBar.add(menuFile);
+		
+		menuHelp.add(menuHelpAbout);
+		menuBar.add(menuHelp);
+		
+		this.setJMenuBar(menuBar);
 		
 		try {
 			image1 = new ImageIcon(TextEditorFrame.class.getResource("Open24.gif"));
