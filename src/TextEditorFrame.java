@@ -1,5 +1,5 @@
 import java.awt.*;
-// import java.awt.event.*;
+import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -38,6 +38,7 @@ public class TextEditorFrame extends JFrame {
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(borderLayout);
 		
+		menuFileExit.addActionListener(new ExitActionAdapter(this));
 		menuFile.add(menuFileExit);
 		menuBar.add(menuFile);
 		
@@ -65,5 +66,23 @@ public class TextEditorFrame extends JFrame {
 		toolBar.add(button3);
 		
 		contentPane.add(toolBar, BorderLayout.NORTH);
+	}
+	
+	
+	public void ExitActionPerformed(ActionEvent e) {
+		System.exit(0);
+	}
+	
+	
+	class ExitActionAdapter implements ActionListener {
+		TextEditorFrame adaptee;
+		
+		ExitActionAdapter(TextEditorFrame adaptee) {
+			this.adaptee = adaptee;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			adaptee.ExitActionPerformed(e);
+		}
 	}
 }
