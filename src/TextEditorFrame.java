@@ -8,9 +8,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JFileChooser;
 
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "static-access", "serial" })
 public class TextEditorFrame extends JFrame {
 	
 	JPanel contentPane;
@@ -19,7 +20,11 @@ public class TextEditorFrame extends JFrame {
 
 	JMenuBar menuBar = new JMenuBar();
 	JMenu menuFile = new JMenu("File");
-			JMenuItem menuFileExit = new JMenuItem("Exit");
+		JMenuItem menuFileExit = new JMenuItem("Exit");
+		JMenuItem menuFileSaveAs = new JMenuItem("Save As");
+		JMenuItem menuFileSave = new JMenuItem("Save");
+		JMenuItem menuFileOpen = new JMenuItem("Open");
+			final JFileChooser chooser = new JFileChooser();
 	JMenu menuHelp = new JMenu("Help");
 			JMenuItem menuHelpAbout = new JMenuItem("About");
 	
@@ -38,7 +43,12 @@ public class TextEditorFrame extends JFrame {
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(borderLayout);
 		
+		menuFileOpen.addActionListener(new OpenActionAdapter(this));
+		menuFileSaveAs.addActionListener(new SaveAsActionAdapter(this));
 		menuFileExit.addActionListener(new ExitActionAdapter(this));
+		menuFile.add(menuFileOpen);
+		menuFile.add(menuFileSave);
+		menuFile.add(menuFileSaveAs);
 		menuFile.add(menuFileExit);
 		menuBar.add(menuFile);
 		
@@ -62,6 +72,7 @@ public class TextEditorFrame extends JFrame {
 			buttonHelp = new JButton("Help");
 		}
 		
+		buttonOpen.addActionListener(new OpenActionAdapter(this));
 		toolBar.add(buttonOpen);
 		toolBar.add(buttonSave);
 		toolBar.add(buttonHelp);
@@ -72,6 +83,20 @@ public class TextEditorFrame extends JFrame {
 	
 	public void ExitActionPerformed(ActionEvent e) {
 		System.exit(0);
+	}
+	
+	
+	public void OpenActionPerformed(ActionEvent e) {
+		if(chooser.showOpenDialog(this) == chooser.APPROVE_OPTION) {
+			System.err.println(chooser.getSelectedFile().getPath());
+		}
+	}
+	
+	
+	public void SaveAsActionPerformed(ActionEvent e) {
+		if(chooser.showSaveDialog(this) == chooser.APPROVE_OPTION) {
+			System.err.println(chooser.getSelectedFile().getPath());
+		}
 	}
 	
 	
@@ -95,6 +120,20 @@ public class TextEditorFrame extends JFrame {
 		}
 	}
 	
+	
+	class OpenActionAdapter implements ActionListener {
+		TextEditorFrame adaptee;
+		
+		OpenActionAdapter(TextEditorFrame adaptee) {
+			this.adaptee = adaptee;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			adaptee.OpenActionPerformed(e);
+		}
+	}
+	
+	
 	class AboutActionAdapter implements ActionListener {
 		TextEditorFrame adaptee;
 		
@@ -104,6 +143,18 @@ public class TextEditorFrame extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			adaptee.AboutActionPerformed(e);
+		}
+	}
+	
+	class SaveAsActionAdapter implements ActionListener {
+		TextEditorFrame adaptee;
+		
+		SaveAsActionAdapter(TextEditorFrame adaptee) {
+			this.adaptee = adaptee;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			adaptee.SaveAsActionPerformed(e);
 		}
 	}
 }
