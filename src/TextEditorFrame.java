@@ -42,6 +42,7 @@ public class TextEditorFrame extends JFrame {
 		menuFile.add(menuFileExit);
 		menuBar.add(menuFile);
 		
+		menuHelpAbout.addActionListener(new AboutActionAdapter(this));
 		menuHelp.add(menuHelpAbout);
 		menuBar.add(menuHelp);
 		
@@ -74,6 +75,13 @@ public class TextEditorFrame extends JFrame {
 	}
 	
 	
+	public void AboutActionPerformed(ActionEvent e) {		
+		AboutTextEditor dialog = new AboutTextEditor(this);
+		dialog.setModal(true);
+		dialog.setVisible(true);
+	}
+	
+	
 	class ExitActionAdapter implements ActionListener {
 		TextEditorFrame adaptee;
 		
@@ -83,6 +91,18 @@ public class TextEditorFrame extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			adaptee.ExitActionPerformed(e);
+		}
+	}
+	
+	class AboutActionAdapter implements ActionListener {
+		TextEditorFrame adaptee;
+		
+		AboutActionAdapter(TextEditorFrame adaptee) {
+			this.adaptee = adaptee;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			adaptee.AboutActionPerformed(e);
 		}
 	}
 }
