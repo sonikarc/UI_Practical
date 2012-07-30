@@ -15,12 +15,6 @@ public class TextEditor {
 		if(frameSize.width > screenSize.width) { frameSize.width = screenSize.width; }
 		frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 		
-		frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-			
 		frame.validate();
 		frame.setVisible(true);
 	}

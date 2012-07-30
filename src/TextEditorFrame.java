@@ -1,7 +1,7 @@
 import java.io.*;
-import java.util.Scanner;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -14,6 +14,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 @SuppressWarnings({ "static-access", "serial" })
@@ -46,10 +48,22 @@ public class TextEditorFrame extends JFrame {
 	JLabel statusBar = new JLabel();
 	
 	String fileName = null;
+	boolean modified = false;
 	
 	public TextEditorFrame() {
 		this.setSize(new Dimension(400, 300));
 		this.setTitle("Text Editor");
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				if(textArea.getText().trim().equals("")) {
+					System.exit(0);
+				} else if(modified == true) {
+					int choice = JOptionPane.showConfirmDialog(null, "You have made changes, do you want to Exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+					if(choice == JOptionPane.YES_OPTION) { System.exit(0); }
+				}
+			}
+		});
 		
 		contentPane = (JPanel) this.getContentPane();
 		contentPane.setLayout(borderLayout);
@@ -66,8 +80,7 @@ public class TextEditorFrame extends JFrame {
 		
 		menuHelpAbout.addActionListener(new AboutActionAdapter(this));
 		menuHelp.add(menuHelpAbout);
-		menuBar.add(menuHelp);
-		
+		menuBar.add(menuHelp);	
 		
 		this.setJMenuBar(menuBar);
 		
@@ -90,6 +103,24 @@ public class TextEditorFrame extends JFrame {
 		toolBar.add(buttonOpen);
 		toolBar.add(buttonSave);
 		toolBar.add(buttonHelp);
+		
+		toolBar.setFloatable(false);
+		
+		
+		class dListener implements DocumentListener {
+			public void insertUpdate(DocumentEvent arg0) {
+				modified = true;
+			}
+
+			public void removeUpdate(DocumentEvent arg0) {
+				modified = true;
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				modified = true;
+			}
+		}
+		textArea.getDocument().addDocumentListener(new dListener());
 				
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		contentPane.add(textArea, BorderLayout.CENTER);
@@ -124,35 +155,45 @@ public class TextEditorFrame extends JFrame {
 	private void saveFile(String fileName) {
 		boolean exists = false;
 		
-		if(fileName == null) {
+		if(textArea.getText().compareToIgnoreCase("") == 0) {
+			statusBar.setText("There's nothing to Save!");
+		} else if(fileName == null) {
 			if(chooser.showSaveDialog(this) == chooser.APPROVE_OPTION) {
 				fileName = chooser.getSelectedFile().getPath();
-				// TODO fix this.
-//				exists = chooser.getSelectedFile().exists();
-//				if(exists == true) {
-//					JOptionPane optionPane = new JOptionPane();
-//					int answer = optionPane.showConfirmDialog(chooser, "This file already exists, would you like to overwrite?", fileName, optionPane.WARNING_MESSAGE, optionPane.YES_NO_CANCEL_OPTION);
-//					System.err.println(answer);
-//				}
+				
+				exists = chooser.getSelectedFile().exists();
+				System.err.println(exists);
+				if(exists == true) {
+					JOptionPane optionPane = new JOptionPane();
+					int answer = optionPane.showConfirmDialog(chooser, "This file already exists, would you like to overwrite?", fileName, optionPane.WARNING_MESSAGE, optionPane.YES_NO_CANCEL_OPTION);
+					System.err.println(answer);
+				}
 			}
-		} else if(this.fileName.compareToIgnoreCase(fileName) == 0) { fileName = this.fileName;}
-		
-		try {
-			File file = new File(fileName);
-			FileWriter out = new FileWriter(file);
-			String text = textArea.getText();
-			out.write(text);
-			out.close();
-			
-			statusBar.setText("Saved file to: " + fileName);
-		} catch (IOException e) {
-			statusBar.setText("Error writing to file: " + fileName);
+		} else if(this.fileName.compareToIgnoreCase(fileName) == 0) { 
+			fileName = this.fileName;
+		} else {
+			try {
+				File file = new File(fileName);
+				FileWriter out = new FileWriter(file);
+				String text = textArea.getText();
+				out.write(text);
+				out.close();
+				
+				statusBar.setText("Saved file to: " + fileName);
+			} catch (IOException e) {
+				statusBar.setText("Error writing to file: " + fileName);
+			}
 		}
 	}
 	
 	
 	public void ExitActionPerformed(ActionEvent e) {
-		System.exit(0);
+		if(textArea.getText().trim().equals("")) {
+			System.exit(0);
+		} else if(modified == true) {
+			int choice = JOptionPane.showConfirmDialog(null, "You have made changes, do you want to Exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+			if(choice == JOptionPane.YES_OPTION) { System.exit(0); }
+		}
 	}
 	
 	
